@@ -13,7 +13,9 @@ Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
   app.name = 'Exit Country'
   app.info_plist['LSUIElement'] = true
+  app.icon = 'Exit Country'
   app.deployment_target = '10.10'
   # Images will not load from the flags directory otherwise
   app.resources_dirs << ['resources/flags_iso/16']
+  app.copyright = "Copyright © 2015 Sergio Rubio. All rights reserved."
 end
