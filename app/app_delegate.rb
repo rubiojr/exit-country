@@ -24,8 +24,7 @@ class AppDelegate
   end
 
   def locationRetrieved(notification)
-    detector = notification.object
-    details = detector.result.split(',')
+    details = notification.object.split(',')
     return unless details[1]
     setFlag "#{details[1].downcase}.png"
     if @countryDetails

@@ -1,10 +1,8 @@
 class CountryDetector
 
   LocationRetrievedNotification = 'LocationRetrievedNotification'
-  attr_reader :result
 
   def initialize
-    @result = nil
     @client = HttpClient.new("https://freegeoip.net")
   end
 
@@ -13,8 +11,7 @@ class CountryDetector
       loop do
         @client.get "/csv" do |response|
           if response.success?
-            @result = response.data
-            Dispatch::Queue.main.sync { NSNotificationCenter.defaultCenter.postNotificationName(LocationRetrievedNotification, object:self) }
+            Dispatch::Queue.main.sync { NSNotificationCenter.defaultCenter.postNotificationName(LocationRetrievedNotification, object: response.data) }
           end
         end
         sleep 5
