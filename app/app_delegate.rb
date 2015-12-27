@@ -9,11 +9,8 @@ class AppDelegate
     @status_image = NSImage.imageNamed "es.png"
 
     @status_item = NSStatusBar.systemStatusBar.statusItemWithLength(NSVariableStatusItemLength).init
-    #@status_item = NSStatusBar.systemStatusBar.statusItemWithLength(NSSquareStatusItemLength).init
     @status_item.setMenu(@status_menu)
     @status_item.setHighlightMode(true)
-    #@status_item.setTitle(@app_name)
-    #@status_item.setImage @status_image
     @status_menu.addItem createMenuItem("About #{@app_name}", 'orderFrontStandardAboutPanel:')
     @status_menu.addItem createMenuItem("Quit", 'terminate:')
 
@@ -22,6 +19,8 @@ class AppDelegate
       selector:'locationRetrieved:',
       name:CountryDetector::LocationRetrievedNotification,
       object:nil
+
+    @image_flags = {}
   end
 
   def locationRetrieved(notification)
@@ -29,7 +28,6 @@ class AppDelegate
     details = detector.result.split(',')
     return unless details[1]
     setFlag "#{details[1].downcase}.png"
-    #@countryDetails = createMenuItem(details[2], 'pressAction')
     if @countryDetails
       @countryDetails.title = details[2]
     else
@@ -49,17 +47,16 @@ class AppDelegate
   end
 
   def setFlag(img)
-    @status_item.button.image = NSImage.imageNamed(img)
+    if @image_flags[img]
+      @status_item.button.image = @image_flags[img]
+    else
+      nsimage = NSImage.imageNamed(img)
+      @image_flags[img] = nsimage
+      @status_item.button.image = nsimage
+    end
   end
 
   def createMenuItem(name, action)
     NSMenuItem.alloc.initWithTitle(name, action: action, keyEquivalent: '')
-  end
-
-  def pressAction
-    alert = NSAlert.alloc.init
-    alert.setMessageText "Action triggered from status bar menu"
-    alert.addButtonWithTitle "OK"
-    alert.runModal
   end
 end

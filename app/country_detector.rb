@@ -14,7 +14,7 @@ class CountryDetector
         @client.get "/csv" do |response|
           if response.success?
             @result = response.data
-            Dispatch::Queue.main.async { NSNotificationCenter.defaultCenter.postNotificationName(LocationRetrievedNotification, object:self) }
+            Dispatch::Queue.main.sync { NSNotificationCenter.defaultCenter.postNotificationName(LocationRetrievedNotification, object:self) }
           end
         end
         sleep 5

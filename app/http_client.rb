@@ -38,7 +38,7 @@ class HttpClient
   end
 
   def create_request(path, options, method)
-    headers = options.fetch(:headers, {})
+    headers = options.fetch(:headers, nil)
     body = options.fetch(:body, nil)
     query = options.fetch(:query, nil)
 
@@ -46,7 +46,9 @@ class HttpClient
 
     request = NSMutableURLRequest.requestWithURL(url)
 
-    set_headers(request, @headers.merge(headers))
+    if headers
+      set_headers(request, @headers.merge(headers))
+    end
     set_body(request, body) if body
 
     request.setHTTPMethod(method.to_s.upcase)
